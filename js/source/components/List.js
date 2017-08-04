@@ -98,8 +98,10 @@ export class List extends React.Component {
     this._addItemsToList();
   }
 
-  componentWillUpdate() {
-
+  componentWillReceiveProps( nextProps ) {
+    this.setState({
+      listItems: nextProps.items
+    });
   }
 
   componentDidUpdate() {
@@ -116,8 +118,8 @@ export class List extends React.Component {
         <div className="list__title">Your List</div>
         <ul className="list__cities">
           {
-            this.props.items &&
-            this.props.items.map(( cityName, idx ) => {
+            this.state.listItems &&
+            this.state.listItems.map(( cityName, idx ) => {
               if ( cityName === this.props.active ) {
                 return (
                   <li className="list__city list__city--active" key={ cityName }>
