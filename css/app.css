@@ -152,6 +152,16 @@ h1 {
   font-size: 6rem;
 }
 
+.search-info {
+  font-size: 2rem;
+}
+.search-info[data-show="visible"] {
+  display: block;
+}
+.search-info[data-show="hidden"] {
+  display: none;
+}
+
 h1 a {
   position: absolute;
   top: 10%;

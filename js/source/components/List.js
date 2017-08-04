@@ -34,6 +34,7 @@ export class List extends React.Component {
       this.props.loadItems( this._arrItems );
     }
     else {
+      console.log( 'props items: ', this.props.items );
       this._arrItems = this.props.items.map(( cityName ) => {
         return cityName;
       })
@@ -47,8 +48,14 @@ export class List extends React.Component {
   }
 
   _saveList() {
-    if ( this.state.listItems ) {
+    console.log( 'from save: ', this.props.items );
+    if ( this.state.listItems.length > 0 ) {
       this.state.listItems.map(( cityName, idx ) => {
+        localStorage.setItem(`${cityName}`, cityName);
+      });
+    }
+    else {
+      this.props.items.map(( cityName, idx ) => {
         localStorage.setItem(`${cityName}`, cityName);
       });
     }
@@ -90,18 +97,20 @@ export class List extends React.Component {
   }
 
   componentDidMount() {
+    console.log( 'list mount' );
     this._addItemsToList();
+  }
+
+  componentWillUpdate() {
+
   }
 
   componentDidUpdate() {
     this._saveList();
   }
 
-  shouldComponentUpdate( nextProps, nextState_ignore ) {
-    return nextProps !== null || nextState_ignore.listItems.length !== this.state.listItems;
-  }
-
   render() {
+
     return (
       <div className="right-block list">
         <div className="close-list">
@@ -110,8 +119,8 @@ export class List extends React.Component {
         <div className="list__title">Your List</div>
         <ul className="list__cities">
           {
-            this.state.listItems &&
-            this.state.listItems.map(( cityName, idx ) => {
+            this.props.items &&
+            this.props.items.map(( cityName, idx ) => {
               if ( cityName === this.props.active ) {
                 return (
                   <li className="list__city list__city--active" key={ cityName }>

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AnimatedNumber from 'react-animated-number';
+import { Search } from './components/Search.js';
 import { List } from './components/List.js';
 
 let apiKey = 'c285797738b3abb8c244d8be0159116c';
@@ -15,7 +16,8 @@ class WeatherInfo extends React.Component {
       data: null,
       position: null,
       listItems: [],
-      date: null
+      date: null,
+      showSearch: false
     };
 
     this.name = "WeatherInfo";
@@ -98,6 +100,10 @@ class WeatherInfo extends React.Component {
   //  items - list of cities name
   _selectCity( cityName ) {
     this._loadFromAPI( { cityName: cityName } );
+
+    this.setState({
+      showSearch: false
+    });
   }
   // end /_selectCity/
 
@@ -105,11 +111,21 @@ class WeatherInfo extends React.Component {
   // Args:
   //  items - list of cities name
   _loadItems( items ) {
-    let cities = items;
+    let bool_return = items !== undefined && items.length > 0 ? true : false;
 
-    this.setState({
-      listItems: cities
-    });
+    if ( items !== undefined && items.length ) {
+      this.setState({
+        listItems: items
+      });
+
+      this._loadFromAPI( { cityName: items[0] } );
+
+      this.setState({
+        showSearch: false
+      });
+    }
+
+    return bool_return;
   }
   // end /_loadItems/
 
@@ -127,6 +143,18 @@ class WeatherInfo extends React.Component {
   _localWeather() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition( this._succes, this._error );
+    }
+    else {
+      console.log( 'geolocation disabled' );
+
+      if ( !this._loadItems() ) {
+        this.setState({
+          showSearch: true
+        });
+      }
+      else {
+        this._loadItems();
+      }
     }
   }
   // end /_localWeather/
@@ -227,17 +255,17 @@ class WeatherInfo extends React.Component {
     });
   }
 
+  _onSearch( cityName ) {
+    this._loadFromAPI( { cityName: cityName } );
+
+    this.setState({
+      showSearch: false
+    });
+  }
+
   // ========================
   // Events
   // ========================
-  _onSearch( e ) {
-    e.preventDefault();
-
-    let cityName = document.forms[0].elements[0].value;
-
-    this._loadFromAPI( { cityName: cityName } );
-  }
-
   _addToList( e ) {
     e.preventDefault();
 
@@ -255,6 +283,8 @@ class WeatherInfo extends React.Component {
     this.setState({
       listItems: listItems
     });
+
+    console.log( 'listItems: ', listItems );
   }
 
   _openList( e ) {
@@ -266,15 +296,16 @@ class WeatherInfo extends React.Component {
   // Lifecycles
   componentDidMount() {
     this._localWeather();
+
   }
 
   render() {
     return (
       <div>
-        <div className="ui active centered inline loader" data-show={ this.state.data !== null ? `hidden` : `visible` }></div>
+        <div className="ui active centered inline loader" data-show={ this.state.data !== null || this.state.showSearch ? `hidden` : `visible` }></div>
 
         <div
-          className="main-container" data-show={ this.state.data !== null ? `visible` : `hidden` }>
+          className="main-container" data-show={ this.state.data !== null || this.state.showSearch ? `visible` : `hidden` }>
 
           <div className="main-block">
             <div className="list-trigger" onClick={ this._openList } title="open list">
@@ -286,14 +317,10 @@ class WeatherInfo extends React.Component {
             <div className="weather-info">
 
               <div className="weather-info__left">
-                <div className="search-block">
-                  <form className="ui form" onSubmit={ this._onSearch }>
-                    <div className="field">
-                      <label>Search</label>
-                      <input className="search-field" type="text" name="search" placeholder="Enter city name" />
-                    </div>
-                  </form>
-                </div>
+
+                <Search search={ this._onSearch } />
+
+                <h1 className="search-info" data-show={ this.state.showSearch ? `visible` : `hidden` }>Введите название города</h1>
 
                 { this.state.date !== null &&
                   <div className="weather-info__date">
@@ -303,21 +330,24 @@ class WeatherInfo extends React.Component {
                     <div className="year">{ this.state.date.year }</div>
                   </div>
                 }
-                <h1 className="city">
-                  { this.state.data !== null ? this.state.data.name : null }
-                  <a onClick={ this._addToList } href={ this.state.data !== null ? this.state.data.name : null } title="add to list"><i className="fa fa-plus" aria-hidden="true"></i></a>
-                </h1>
-                <div className="weather-info__item tempreature">
-                  <div data-img={ this.state.data !== null ? `${this.state.data.weather[0].main}` : null }></div>
-                  { this.state.data !== null
-                    ? (
-                      <span>{ `${ this.state.data.main.temp.toFixed(0) } °C` }</span>
-                    )
-                    : null }
-                </div>
 
-                <div id="weather-chart"></div>
+                { this.state.data &&
+                  <div>
+                    <h1 className="city">
+                      { this.state.data.name }
+                      <a onClick={ this._addToList } href={ this.state.data.name } title="add to list"><i className="fa fa-plus" aria-hidden="true"></i></a>
+                    </h1>
+                    <div className="weather-info__item tempreature">
+                      <div data-img={ `${this.state.data.weather[0].main}` }></div>
+                      <span>{ `${ this.state.data.main.temp.toFixed(0) } °C` }</span>
+                    </div>
+
+                    <div id="weather-chart"></div>
+                  </div>
+                }
+
               </div>
+
               <div className="weather-info__right">
                 <div className="weather-info__item clouds">
                   <div className="icon">
@@ -339,7 +369,7 @@ class WeatherInfo extends React.Component {
                         duration={1000}
                         formatValue={n => `${n} %`}/>
                     )
-                    : null }
+                    : 'clouds' }
                 </div>
                 <div className="weather-info__item humidity">
                   <div className="icon">
@@ -361,7 +391,7 @@ class WeatherInfo extends React.Component {
                         duration={1000}
                         formatValue={n => `${n} %`}/>
                     )
-                    : null }
+                    : 'humidity' }
                 </div>
                 <div className="weather-info__item wind">{ this.state.data !== null
                   ? (
@@ -379,7 +409,7 @@ class WeatherInfo extends React.Component {
                       duration={1000}
                       formatValue={n => `${n} m/s`}/>
                   )
-                  : null }</div>
+                  : 'wind speed' }</div>
               </div>
             </div>
           </div>
