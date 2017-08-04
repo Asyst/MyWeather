@@ -145,8 +145,6 @@ class WeatherInfo extends React.Component {
       navigator.geolocation.getCurrentPosition( this._succes, this._error );
     }
     else {
-      console.log( 'geolocation disabled' );
-
       if ( !this._loadItems() ) {
         this.setState({
           showSearch: true
@@ -283,8 +281,6 @@ class WeatherInfo extends React.Component {
     this.setState({
       listItems: listItems
     });
-
-    console.log( 'listItems: ', listItems );
   }
 
   _openList( e ) {

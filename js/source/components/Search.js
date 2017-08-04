@@ -29,3 +29,7 @@ export class Search extends React.Component {
     );
   }
 }
+
+Search.propTypes = {
+  search: React.PropTypes.func
+};

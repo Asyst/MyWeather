@@ -34,7 +34,6 @@ export class List extends React.Component {
       this.props.loadItems( this._arrItems );
     }
     else {
-      console.log( 'props items: ', this.props.items );
       this._arrItems = this.props.items.map(( cityName ) => {
         return cityName;
       })
@@ -48,7 +47,6 @@ export class List extends React.Component {
   }
 
   _saveList() {
-    console.log( 'from save: ', this.props.items );
     if ( this.state.listItems.length > 0 ) {
       this.state.listItems.map(( cityName, idx ) => {
         localStorage.setItem(`${cityName}`, cityName);
@@ -97,7 +95,6 @@ export class List extends React.Component {
   }
 
   componentDidMount() {
-    console.log( 'list mount' );
     this._addItemsToList();
   }
 
@@ -146,3 +143,10 @@ export class List extends React.Component {
     );
   }
 }
+
+List.propTypes = {
+  items: React.PropTypes.array,
+  loadItems: React.PropTypes.func,
+  onClick: React.PropTypes.func,
+  active: React.PropTypes.string
+};
