@@ -5,12 +5,14 @@ import { withRouter, Link, Redirect  } from 'react-router-dom';
 
 const List = ({ data, citiesList, active, selectCity, deleteCity }) => {
 
+  let citiesAmount = citiesList.length;
+
   return (
       <div className="List">
         <div className="close-list">
           <i className="fa fa-times" aria-hidden="true"></i>
         </div>
-        <div className="list__title">Your List</div>
+        <div className="list__title">Your List: <span className="citiesAmount">{ citiesAmount }</span></div>
         <ul className="list__cities">
           {
             citiesList &&
