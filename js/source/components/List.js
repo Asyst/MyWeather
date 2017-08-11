@@ -5,7 +5,7 @@ import { withRouter, Link, Redirect  } from 'react-router-dom';
 
 const List = ({ data, citiesList, active, selectCity, deleteCity }) => {
 
-  let citiesAmount = citiesList.length;
+  let citiesAmount = citiesList.length > 0 ? citiesList.length : '';
 
   return (
       <div className="List">
