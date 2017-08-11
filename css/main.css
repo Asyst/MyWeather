@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  height: 100%;
+  font-size: 14px;
+}
+
+@media ( max-width: 1099px ) {
+  html {
+    font-size: 10px;
+  }
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+.welcome-title {
+  position: absolute;
+  left: 23%;
+  padding: 18px 0 0;
+  font-size:  2rem;
+  text-align: center;
+
+  opacity: 1;
+  transition: all .5s;
+  transition-delay: .1s;
+}
+.welcome-title.hidden {
+  opacity: 0;
+}
+
+.buttons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translate( 21%, 50%);
+  transition: transform 1s;
+  z-index: 999;
+}
+.buttons .search-link {
+  width: 30%;
+  transition: all .5s;
+}
+.buttons .forecast-link {
+  opacity: 0;
+  transition: opacity .5s;
+}
+
+.buttons.loaded {
+  top: 38px;
+  left: 38px;
+  height: auto;
+  transform: translate( 0, 0 );
+}
+
+.buttons.loaded .search-link {
+  width: 15%;
+}
+.buttons.loaded .forecast-link {
+  width: 15%;
+  opacity: 1;
+}
+
+.Forecast {
+  padding: 38px;
+  width: 100%;
+  height: 100%;
+}
+
+.city.loaded {
+  transform: translateY(-100%);
+  opacity: 0;
+  animation-name: cityAnimate;
+  animation-duration: 1s;
+  animation-delay: .5s;
+  animation-fill-mode: forwards;
+}
+
+.temp.loaded {
+  transform: translateX(-100%);
+  opacity: 0;
+  animation-name: tempAnimate;
+  animation-duration: 1s;
+  animation-delay: .5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes cityAnimate {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes tempAnimate {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

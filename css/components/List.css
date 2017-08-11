@@ -1,0 +1,107 @@
+/* List */
+.List {
+  padding: 38px 0 0;
+  width: 30%;
+  transition: all .5s;
+}
+
+@media( max-width: 992px ) {
+  .List {
+    position: fixed;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    transform: translateX(100%);
+  }
+  .List--opened {
+    transform: translateX(0%);
+    box-shadow: -1px 3px 18px rgba(0, 0, 0, .3);
+  }
+}
+
+.List .list__title {
+  margin: 0 0 38px;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.List ul.list__cities {
+  padding: 0;
+  width: 100%;
+  list-style-type: square;
+  list-style-position: inside;
+}
+
+.List ul.list__cities .list__city {
+  position: relative;
+  width: 100%;
+  padding: 8px 18px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all .3s;
+  cursor: pointer;
+}
+.List ul.list__cities .list__city span {
+  display: inline-block;
+  width: 90%;
+}
+.List ul.list__cities .list__city .fa {
+  position: absolute;
+  right: 38px;
+}
+
+.List ul.list__cities .list__city--active {
+  background-color: #3F51B0;
+  color: #fff;
+}
+.List ul.list__cities .list__city:hover {
+  background-color: #3F51B0;
+  color: #fff;
+}
+
+.List .list-trigger {
+  display: none;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 48px;
+  height: 28px;
+  cursor: pointer;
+}
+.List .list-trigger span {
+  position: absolute;
+  display: inline-block;
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+}
+.List .list-trigger span:nth-of-type(1) {
+  top: 0;
+}
+.List .list-trigger span:nth-of-type(2) {
+  top: 16px;
+}
+.List .list-trigger span:nth-of-type(3) {
+  top: 32px;
+}
+
+.List .close-list {
+  display: none;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  cursor: pointer;
+}
+.List .close-list .fa {
+  font-size: 24px;
+  color: #3F51B0;
+}
+
+@media( max-width: 992px ) {
+  .List .list-trigger,
+  .List .close-list {
+    display: block;
+  }
+}

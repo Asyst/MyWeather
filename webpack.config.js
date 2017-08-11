@@ -16,11 +16,14 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'react']
-        }
+        loader: 'babel-loader'
       }
     ]
+  },
+  devServer: {
+    contentBase: path.join(__dirname, "./"),
+    compress: false,
+    port: 8080,
+    historyApiFallback: true
   }
 };
